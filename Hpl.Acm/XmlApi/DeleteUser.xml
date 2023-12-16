@@ -1,0 +1,20 @@
+﻿<MDaemon>
+  <script/>
+  <API>
+    <Request version="20.0.0" echo="1" verbose="0">
+      <Operation>DeleteUser</Operation>
+      <Parameters>
+        <Domain>haiphatland.com.vn</Domain>
+        <Mailbox>baonx</Mailbox>
+        <RemoveFromGroups>1</RemoveFromGroups>
+        <RemoveAutoResponder>1</RemoveAutoResponder>
+        <RemoveForwardingData>1</RemoveForwardingData>
+        <RemoveMailFormatData>1</RemoveMailFormatData>
+        <RemoveMultiPopData>1</RemoveMultiPopData>
+        <RemoveAliases>1</RemoveAliases>
+        <RemoveMailbox>0</RemoveMailbox>
+        <RemoveFromLists>1</RemoveFromLists>
+      </Parameters>
+    </Request>
+  </API>
+</MDaemon>

@@ -1,0 +1,4 @@
+2021-09-30 16:13:22.573 +07:00 [INF] START PasswordController.GetUserInfo: 
+2021-09-30 16:13:22.624 +07:00 [INF] PasswordController.GetUserInfo: demo
+2021-09-30 16:13:22.626 +07:00 [INF] PasswordChangeProvider.GetUserInfo
+2021-09-30 16:13:22.627 +07:00 [WRN] Using AutomaticContext

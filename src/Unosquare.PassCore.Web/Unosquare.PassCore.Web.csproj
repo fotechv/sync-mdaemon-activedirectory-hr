@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**\node_modules\**;node_modules\**</DefaultItemExcludes>
+    <Copyright>Copyright (c) 2018-2020 - Unosquare</Copyright>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Unosquare.PassCore.Web</AssemblyName>
+    <PackageId>Unosquare.PassCore.Web</PackageId>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <IsPackable>false</IsPackable>
+    <CodeAnalysisRuleSet>..\..\StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RootNamespace>Unosquare.PassCore.Web</RootNamespace>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>b135379b-cd03-4911-98a0-d7c44da15de3</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.5.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Map" Version="1.0.2" />
+    <PackageReference Include="SimpleBase" Version="3.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Unosquare.Swan" Version="3.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="ClientApp\**" />
+    <None Remove="logs\LDAP_Win-log-20201204.txt" />
+    <None Remove="logs\LDAP_Win-log-20201208.txt" />
+    <None Remove="logs\LDAP_Win-log-20210128.txt" />
+    <None Remove="logs\LDAP_Win-log-20210129.txt" />
+    <None Remove="logs\LDAP_Win-log-20210130.txt" />
+    <Content Include="bin\Release\net5.0\publish\XmlApi\Response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="ClientApp\package.json" />
+    <Content Include="ClientApp\tsconfig.json" />
+    <Content Update="wwwroot/**/*.map" CopyToPublishDirectory="Never" />
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="bin\Release\net5.0\publish\XmlApi\CreateUser - Copy.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\CreateUser.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\GetDomainList.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\GetUserInfo.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingCreateList - Copy.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingCreateList.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingGetListInfo.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingGetListInfoRes.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingUpdateList - Copy.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\MailingUpdateList.xml" />
+    <None Include="bin\Release\net5.0\publish\XmlApi\Response.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Hpl.Common.Helper\Hpl.Common.Helper.csproj" />
+    <ProjectReference Include="..\..\Hpl.Common\Hpl.Common.csproj" />
+    <ProjectReference Include="..\PwnedPasswordsSearch\PwnedPasswordsSearch.csproj" />
+    <ProjectReference Include="..\Unosquare.PassCore.Common\Unosquare.PassCore.Common.csproj" />
+    <ProjectReference Include="..\Unosquare.PassCore.PasswordProvider\Unosquare.PassCore.PasswordProvider.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(PASSCORE_PROVIDER)' == 'LDAP'">
+    <!-- Pure LDAP provider -->
+    <ProjectReference Include="..\Zyborg.PassCore.PasswordProvider.LDAP\Zyborg.PassCore.PasswordProvider.LDAP.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\net5.0\publish\logs\" />
+    <Folder Include="ClientApp\assets\css\" />
+    <Folder Include="logs\" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(PASSCORE_PROVIDER)' == 'LDAP'">
+    <DefineConstants>PASSCORE_LDAP_PROVIDER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('.\ClientApp\node_modules')">
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Exec Command="npm install" WorkingDirectory=".\ClientApp" />
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Performing first-run npm install..." />
+  </Target>
+  <Target Name="Parcel" DependsOnTargets="NpmInstall" BeforeTargets="Build">
+    <Message Importance="high" Text="Performing run Parcel build..." />
+    <Exec Command="npm run build" WorkingDirectory=".\ClientApp" />
+  </Target>
+</Project>
