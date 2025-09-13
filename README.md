@@ -1,3 +1,7 @@
+# Manage users and synchronize between systems: MDaemon Email Server <=> Active Directory (AD) <=> HR system
+There are some small projects in this source code, I have not optimized them yet.
+
+##  Code that uses part of PassCore
 [![Build status](https://ci.appveyor.com/api/projects/status/76nxqw893mk7xfb9/branch/master?svg=true)](https://ci.appveyor.com/project/geoperez/passcore/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/unosquare/passcore/total.svg)](https://github.com/unosquare/passcore/releases)
 ![Buils status](https://github.com/unosquare/passcore/workflows/ASP.NET%20Core%20CI/badge.svg)
